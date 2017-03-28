@@ -9,3 +9,5 @@
 <h1>h1</h1>
 <h4>h4</h4>
 <h6>h6</h6>
+
+<script>console.log(29);</script>
