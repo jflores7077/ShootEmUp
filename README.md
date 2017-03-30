@@ -4,4 +4,4 @@
 456
 
 <h3>Screenshots</h3>
-<img src = 'https://github.com/jflores7077/ShootEmUp/blob/master/ShootEmUp/start.PNG' width = '150px' ></img><img src = 'https://github.com/jflores7077/ShootEmUp/blob/master/ShootEmUp/game.PNG' width = '150px' > </img><img src = 'https://github.com/jflores7077/ShootEmUp/blob/master/ShootEmUp/end.PNG' width = '150px' > </img>
+<img src = 'https://github.com/jflores7077/ShootEmUp/blob/master/ShootEmUp/start.PNG' width = '50px' ></img><img src = 'https://github.com/jflores7077/ShootEmUp/blob/master/ShootEmUp/game.PNG' width = '50px' > </img><img src = 'https://github.com/jflores7077/ShootEmUp/blob/master/ShootEmUp/end.PNG' width = '50px' > </img>
