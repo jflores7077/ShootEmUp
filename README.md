@@ -6,4 +6,4 @@
 <h3>Screenshots</h3>
 <img src = 'https://github.com/jflores7077/ShootEmUp/blob/master/ShootEmUp/start.PNG' width = '250px' ></img><img src = 'https://github.com/jflores7077/ShootEmUp/blob/master/ShootEmUp/game.PNG' width = '250px' > </img><img src = 'https://github.com/jflores7077/ShootEmUp/blob/master/ShootEmUp/end.PNG' width = '250px' > </img>
 
-<input> type='text'</input>
+<input  type='text'></input>
