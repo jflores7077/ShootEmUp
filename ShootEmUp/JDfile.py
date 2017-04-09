@@ -1,4 +1,7 @@
+#Import gamelib, which imports python
 from gamelib import *
+
+#A dictionary of the players current weopon and the enemies weopon
 arms = {
     'blank':{
             #Bullets left
@@ -67,10 +70,13 @@ arms = {
             'damage':5,
     }
 }
+
+#Create a class of blocks
 class blocks(object):
     def __init__(self,a,game):
         self.game = game
         self.a = a
+        #Save blocks in a dictionary, so to get a block you would do x.blockType['grass']
         self.blockType = {
             'grass':Image('SSimg\\Grass.png',self.game),
             'dirt': Image('SSimg\\dirt.png',self.game),
@@ -78,14 +84,16 @@ class blocks(object):
             'brick': Image('SSimg\\Brick.jpg',self.game),
             'brown': Image('SSimg\\brown.png',self.game),
         }
+        #Resize every image in blockType
         for i in self.blockType.keys():
             self.blockType[i].resizeTo(a.iw,a.ih)
-            
+         
 class bullet(object):
     def __init__(self,player,game,shotBy):
         self.game = game
         self.player = player
         self.x,self.y = self.player.p.x,self.player.p.y
+        #I figured out how to take the rotation of the a image in gamelib lmao
         self.rotate = self.player.rr-90
         #+randint(-self.player.b['acc'],-self.player.b['acc'])
         #max speed, angle
@@ -103,6 +111,7 @@ class Map(object):
     def __init__(self,array,game):
         self.a = array
         self.game = game
+        
         #Find the first ','. This will mark the width of string.
         self.w = len(self.a[0])
 
@@ -112,25 +121,27 @@ class Map(object):
         #x is the row which the image is in
         self.x = 0
 
-        #Images width and heigh4 ***if strw < 5 else 4***
+        #Images width and heigh4 (***if strw < 5 else 4***)
         self.iw = round(self.game.width/(self.w))
         self.ih = round(self.game.height/(self.h))
         self.x = 0,
         self.y = 0
         self.type = 'n/a'
+        #Failed collision, cri
         self.collided = False
-        
+   
     def render(self,blk,player):
+        #Get block data type
         self.blk = blk
         self.p = player
         self.pa = player.p
-        #Go through every letter in curMap and return (count, value)
-        
+        #Go through every letter in curMap, which is a 2d array. So we must use two arrays
         for i in range(len(self.a)):
             for j in range(len(self.a[i])):
                 self.x = (self.iw/2)+((self.iw) * j)
                 self.y = (self.ih/2)+((self.ih) * i )
                 
+                #If a[i][j] is x then change that part to a image of _____
                 if self.a[i][j] == 0:
                     self.blk.blockType['grass'].moveTo(self.x,self.y)
                     self.type = 'grass'
@@ -155,24 +166,30 @@ class Map(object):
                     self.blk.blockType['brown'].moveTo(self.x,self.y)
                     self.type = 'brown'
                     self.blk.blockType['brown'].draw()
+                    
+                #Failed collision
                 if self.p.x >=self.x-self.iw/2 and self.p.x<=self.x+self.iw/2 and self.p.y>=self.y-self.ih/2 and self.p.y<=self.y+self.ih/2:
                     self.collided = True
                 else:
                     self.collided = False
-        
+#State allows multiple screens, this could easily be done with just a variable and if statements
 class State(object):
     def __init__(self,start):
         self.strt= str(start)
         self.st = self.strt
+    #Change state
     def change(self,s):
         self.s = str(s)
         self.st = self.s
+    #Broken
     def eq(self,EqTo):
         self.eq = str(EqTo)
         if str(self.st) == EqTo:
             return True
         else:
             return False
+        
+    #Broken
     def get(self):
         return self.state
     
@@ -183,6 +200,7 @@ class player(object):
         self.game = game
         self.canShoot = True
         self.bullets = ba
+        #Lazy workaround for wrong damage when bullet hits
         self.type = 'player'
         #             x,y,max,dec
         self.speed = [0,0,2.5,0.6]
@@ -190,19 +208,24 @@ class player(object):
         self.hp = 100 
         self.r = 0
         self.a = a
+        #Current value of tr doesn't matter
         self.tr = ["0102910010221001"]
         self.pew = Sound('Audio//pew_JD.wav',1)
         self.w = len(self.a[0])*3.5
         self.h = len(self.a)*3.5
         self.max = 3
         self.vel = 0.2
+        #Give the player a weopon from the arms dictionary
         self.b = arms['pistol']
         self.p = Animation('SSimg\\playerEJD.png',3,self.game,48/3,20,12)
         self.p.stop()
         self.p.resizeTo(self.w,self.h)
+        #Get the rotation of the player image
         self.rr = self.p.rotate_angle * 180 / math.pi
         #           right, left, down, up
+        #Failed collision
         self.col = [False,False,False,False]
+        
     def move(self, k = 0):
         self.rr = self.p.rotate_angle * 180 / math.pi
         self.tr = self.speed
@@ -216,9 +239,10 @@ class player(object):
         self.ba = bArray
         
         for BU_i in self.ba:
+            #Returns true if player is shot by anyone but the player itself
             if BU_i.image.collidedWith(self.p) and BU_i.shotBy != 'player':
                 return True
-            
+    #Move with keys, too much to explain, but most should be self explanotary
     def key(self, lmao):
         if keys.Pressed[K_UP] or keys.Pressed[K_w]:
             self.speed[1]=-self.speed[2]
@@ -237,7 +261,7 @@ class player(object):
         else:
             self.speed[0] *= self.speed[3]
 
-        #Bullets
+        #Bullet shootin
         if keys.Pressed[K_SPACE] and self.canShoot or mouse.LeftButton and self.canShoot:
             self.canShoot = False
             
@@ -245,12 +269,12 @@ class player(object):
         self.b['rtime']+=1
         
         if self.canShoot == False:
-            #if rtime has reached its max time, reset it
+            #if rtime has reached its max time, reset it and set canShoot to True
             if self.b['rtime'] >= self.b['time'] :
                 self.b['rtime'] = 0
                 self.canShoot = True
 
-            #if any bul,lets are left and rtime is 0, then add a bullet to the array
+            #if any bullets are left and rtime is 0, then add a bullet to the array
             if  self.b['left'] > 0 and self.b['rtime'] == 0 and self.canShoot:
                 self.bullets.append(bullet(self,self.game,'player'))
                 self.pew.play()
@@ -268,8 +292,11 @@ class player(object):
             if self.b['reload'] >= self.b['rr']:
                 self.b['reload'] = 0
                 self.b['left'] = self.b['max']
+    #Prints 2
     def explode(self):
         print(2)
+        
+#Basicaly a copy/paste of player without keys
 class guy(object):
     def __init__(self,x,y,a,ba,dist,game):
         self.x = x
@@ -371,6 +398,7 @@ class power(object):
 
         self.game = game
         
+        #The type of the power-up
         self.type = 'ayye'
         self.rand = randint(1, 3)
         
@@ -394,11 +422,13 @@ class power(object):
         self.frame = 0
         self.touchAudio = 0
         self.touched = False
+        #Time until the power spawns again
         self.timeTil = randint(40,150)
     def display(self):
         self.frame+=1
         
         if self.touched == False:
+            #Math to move around the power up in one line 
             self.img.moveTo(self.x+math.sin(self.frame*0.05)*20,self.y+math.cos(self.frame*0.02)*20)
             self.img.draw()
         else:
@@ -459,6 +489,7 @@ class bttn(Image):
         self.txt = txt
         self.g = game
         self.start = False
+        #Start button or shop button
         if self.txt == 'start':
             self.btn = Image('SSimg\\startBttn.png',self.g)
             
@@ -476,10 +507,11 @@ class bttn(Image):
     def draw(self):
         self.btn.draw()
         self.btn.moveTo(self.x,self.y)
-
+        #If the mouse is over the the button
         if mouse.x >=self.x-self.w/2 and mouse.x<=self.x+self.w/2 and mouse.y>=self.y-self.h/2 and mouse.y<=self.y+self.h/2:
             self.over = True
-                
+             
+            #If mouse click
             if mouse.LeftButton:
                 self.click = True
             else:
@@ -495,12 +527,11 @@ class bttn(Image):
             self.t2 = 0
             #Once the user has finished clicking
             return False
+        #If the mouse is hovering the button
         if self.over:
             self.t+=1
             self.x = self.sx
             self.y = self.sy
-
-            #If the user is over the button
             
         elif self.t > 0 and self.over == False:
             self.x = self.sx-self.d
