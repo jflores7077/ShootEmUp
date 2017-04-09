@@ -7,4 +7,6 @@
 <img src = 'https://github.com/jflores7077/ShootEmUp/blob/master/ShootEmUp/start.PNG' width = '250px' ></img><img src = 'https://github.com/jflores7077/ShootEmUp/blob/master/ShootEmUp/game.PNG' width = '250px' > </img><img src = 'https://github.com/jflores7077/ShootEmUp/blob/master/ShootEmUp/end.PNG' width = '250px' > </img>
 
 <h3>Resources</h3>
-<p>Player Images:</p>
+<a href='http://www.lfd.uci.edu/~gohlke/pythonlibs/#pygame'>PyGame Wheel File </a>
+<a href = 'https://youtu.be/_GikMdhAhv0'>link to video on "Installing Python 3.6 and PyGame"</a>
+
