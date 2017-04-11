@@ -1,5 +1,6 @@
 #Import gamelib, which imports python
 from gamelib import *
+import random
 
 #A dictionary of the players current weopon and the enemies weopon
 arms = {
@@ -112,10 +113,10 @@ class Map(object):
         self.a = array
         self.game = game
         
-        #Find the first ','. This will mark the width of string.
+        #Find the first ','.  self will mark the width of string.
         self.w = len(self.a[0])
 
-        #Count the ','. This will mark the 'height' of the string
+        #Count the ','.  self will mark the 'height' of the string
         self.h = len(self.a)
 
         #x is the row which the image is in
@@ -172,7 +173,7 @@ class Map(object):
                     self.collided = True
                 else:
                     self.collided = False
-#State allows multiple screens, this could easily be done with just a variable and if statements
+#State allows multiple screens,  self could easily be done with just a variable and if statements
 class State(object):
     def __init__(self,start):
         self.strt= str(start)
@@ -539,5 +540,102 @@ class bttn(Image):
             self.t = 0
             #Once the user is not over the button
             
+class move(object):
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.r = 0
         
+        self.tx = 0 
+        self.ty = 0 
+        self.tr = 0 
+        
+        self.Ix = 5
+        self.Iy = 5
+
+        self.fc = 0
+    def start(self, obj):
+        self.fc += 0.1
+        
+        #translate( self.tx, self.ty) 
+        #rotate( self.tr)
+        obj.x = obj.x + self.tx
+        obj.y = obj.y + self.ty
+        
+        self.x += sin(self.fc)*5+randint(-5,5) 
+        self.y += cos(self.fc)*5+randint(-5,5)
+        
+        self.ty = sin( self.x )* self.Iy 
+        self.tx = cos( self.y )* self.Ix 
+        
+        if self.Ix > 1:
+            self.Ix =  self.Ix*0.9
+        
+        if self.Iy > 1:
+            self.Iy =  self.Iy*0.9
+       
+    def addXY(self,x,y):
+        #self.Ix+=x 
+        #self.Iy+=y
+        print(2)
+    
+class Menu(object):
+    def __init__(self,game):
+        self.x = 0
+        self.y = 0
+        
+        self.game = game
+        
+        #Movement for button animation at beginning
+        #       y, acc
+        self.bttns = [self.game.height+150, 12.5]
+
+        #Is the animation complete?
+        self.breach = False
+        self.bty = 150+self.y
+        
+        #Logo Animation at begining
+        self.ld = Animation('SSimg\\Amenu.png',25,self.game,(160/5),160/5,1)
+        self.ld.resizeTo(self.game.width-(self.game.width/3),self.game.height-(self.game.height/3))
+        self.ld.y = 220
+
+        #Crosshair image
+        self.crs = Image('SSimg\\crosshair.png',game)
+
+        #Background color
+        self.bk = (0)
+
+        #Current Frame
+        self.frame = 0
+
+        self.crs.resizeBy(-90)
+
+        #Create a new button called bttn1
+        self.bttn1 = bttn((self.game.width/2), (-150),150,50,'start',self.game)
+
+    def display(self):
+        self.frame += 1
+        self.game.clearBackground(self.bk)
+        self.ld.draw()
+        self.ld.x = self.x+(self.game.width/2)
+        self.ld.y = self.y+(self.game.height/2)-80
+        
+        self.game.drawText('By Jet Developers',((self.game.width/2)-150)+self.x,(self.game.height-90)+self.y,Font(black, 50, blue))
+        #If frame has reached 20
+        if self.frame >= 20:
+            #Stop the button from moving
+            #state.change('menu')
+            self.ld.stop()
+            
+            #If the button has not reached (game.height-(game.height/5)) and breach is false keep moving the button
+            if self.bttn1.y+self.y >= (self.game.height-(self.game.height/5))+self.y and self.breach == False:
+                self.bttns[0]-=self.bttns[1]+self.y
+            else:
+                self.breach = True
+    
+        self.bttn1.y = self.bttns[0]+self.y
+        
+        #Draw the button and if the button returns true
+        if self.bttn1.draw():
+            return True;
         
