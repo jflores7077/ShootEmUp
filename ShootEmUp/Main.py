@@ -114,38 +114,31 @@ time = 3
 #Power object
 powers = power(300,300, game)
 
+#Menu
+menu = Menu(game)
+
+#Add menu animation
+a_menu = move()
+
 #Game loop
 while not game.over:
     game.processInput()
+    menu.display()
     
     #Add 1 to frame until game.over is false
     frame +=1
     
     #If state.st is equal to menu
     if str(state.st) == 'menu':
-        game.clearBackground(bk)
-        ld.draw()
-        game.drawText('By Jet Developers',((game.width/2)-150),game.height-90,Font(black, 50, blue))
-        #If frame has reached 20
-        if frame >= 20:
-            #Stop the button from moving
-            #state.change('menu')
-            ld.stop()
-            #If the button has not reached (game.height-(game.height/5)) and breach is false keep moving the button
-            if bttn1.y >= (game.height-(game.height/5)) and breach == False:
-                bttns[0]-=bttns[1]
-            else:
-                breach = True
-                
-        bk = 0
-        bttn1.y = bttns[0]
-        
-        #Draw the button and if the button returns true
-        if bttn1.draw():
+
+        #Display the menu, and if the button is pressed, show the instruction menu
+        if menu.display():
             #Change the game state to the intruction page
             state.change('inst')
-            frame = 0
-            
+            menu.frame = 0
+        
+        a_menu.start(menu)
+
     #If the state is inst display the instructions
     elif str(state.st) == 'inst':
         game.clearBackground((55))
