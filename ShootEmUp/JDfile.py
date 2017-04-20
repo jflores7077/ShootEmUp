@@ -634,8 +634,8 @@ class Menu(object):
                 self.breach = True
     
         self.bttn1.y = self.bttns[0]+self.y
-        
+
+    def next(self):
         #Draw the button and if the button returns true
         if self.bttn1.draw():
             return True;
-        
