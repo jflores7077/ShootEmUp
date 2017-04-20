@@ -130,9 +130,10 @@ while not game.over:
     
     #If state.st is equal to menu
     if str(state.st) == 'menu':
-
         #Display the menu, and if the button is pressed, show the instruction menu
-        if menu.display():
+        menu.display()
+            
+        if menu.next():
             #Change the game state to the intruction page
             state.change('inst')
             menu.frame = 0
